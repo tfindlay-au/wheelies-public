@@ -4,7 +4,7 @@ Code resources for the wheelie project - track your wheelie data and improve.
 ## Data Collection Rig
 
 ### Hardware
-![hardware steup](data_collection_rig.jpg)
+![hardware steup](images/data_collection_rig.jpg)
 
 It doesn’t get much slicker than this. The hardware comprises:
 * 1 bike (A)
@@ -17,7 +17,7 @@ Pro-tips:
 1. First, open the SensorLog app (see below)
 2. Position the duct tape so that (i) the “Device Motion” traces are visible for a cool cockpit display and (ii) it’s easy to press the record button at bottom left
 3. For nocturnal wheelies, a front light pointing down illuminates the ground in front when the wheel is up in the air
-4. A bell may be required by law for riding local streets
+4. A bell may be required by law for riding local streets in Australia
 
 ### Software
 
@@ -32,10 +32,16 @@ To configure the data logged:
 * Set desired logging frequency. I have settled on 10Hz, but will review in future.
 * Log the following sensors: minimum: “Device Motion”; recommended, add: Accelerometer, Core Location, Gyro, Heading, Magnetometer (or Android equivalents)
 
-![SensorLog app config](SensorLog_config.png)
+![SensorLog app config](images/SensorLog_config.png)
 
 After each session, the recorded data can be uploaded to a Google Drive folder as a CSV file.
 
 ## Data Processing Notebook
 
 See [Process Sensor Data](process_sensor_data.ipynb) notebook to run on [Colaboratory](https://colab.research.google.com/)
+
+## Future ideas
+* Consider calculating Time-Of-Flight (ToF) for speed of movement.
+** Best speed for wheelie ?
+** Entry vs Exit speed
+* Consider calculating "steadiness" of other axis - is the wheelie straight ?
