@@ -3,28 +3,55 @@ from digitalio import DigitalInOut, Direction
 import time
 import busio
 import mpu9250
+import log
 
-def write_data(value):
+# Setup the log file, max 1MB
+data_log = log.FileHandler("/output.txt", 1000000)
+
+def write_data(values):
+    """
+    This function controls the output using the log emitter, but as a fallback uses the console
+    This also uses the LED as an indicator if it logging successfully
+    :param values:
+    :return:
+    """
+    # Split elements up separated by comma
+    message = "{}".format(",".join(values))
+
     try:
-        with open("/output.txt", "a") as fp:
-            fp.write("{}".format(value))
-            fp.flush()
-
-            blink_color(board.LED_B)
-
-    except OSError as e:
-        print("OS Error: {0}".format(e.strerror))
+        # Try to log them to file, normal operation
+        data_log.emit(message + '\n')
+        blink_color(board.LED_B)
+    except OSError:
+        # If the USB console is active, just display on console output
+        print(message)
         blink_color(board.LED_R)
 
 
 def blink_color(led_ref):
+    """
+    Function to control the LED and perform a simple blink
+    Total delay = 1 second
+    This encapsulates activating the pin and de-activating it to avoid color mashing
+    :param led_ref:
+    """
     led = DigitalInOut(led_ref)
     led.direction = Direction.OUTPUT
     led.value = True
-    time.sleep(1)
+    time.sleep(0.1)
     led.value = False
-    time.sleep(1)
+    time.sleep(0.1)
     led.deinit()
+
+
+def merge_tuples(*tuples):
+    """
+    Utility method to merge a number of tuples into a list.
+    To aid output, this also converts numbers into strings for easy output
+    :param tuples:
+    :return: List[String]
+    """
+    return [str(j) for i in tuples for j in (i if isinstance(i, tuple) else (i,))]
 
 
 def main():
@@ -38,11 +65,17 @@ def main():
         _gyro = mpu.gyro
         _temperature = mpu.temperature
 
-        print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s" % _acceleration)
-        print("Gyro X:%.2f, Y: %.2f, Z: %.2f degrees/s" % _gyro)
-        print("Temperature: %.2f C" % _temperature)
+        # Assemble all the data to capture
+        # counter, accX, accY, accZ, gyroX, gyroY, gyroZ, temp
+        # TODO Nicer to use a dictionary here and use that to print a header row
+        payload = merge_tuples(
+            str(time.monotonic()),
+            _acceleration,
+            _gyro,
+            _temperature
+        )
 
-        write_data(_acceleration)
+        write_data(payload)
 
 if __name__ == "__main__":
     main()

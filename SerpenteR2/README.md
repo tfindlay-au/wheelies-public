@@ -1,5 +1,6 @@
 # Using a Serpene R2 for data collection
 This folder contains references for using a Serpente R2
+https://www.solder.party/docs/serpente/r2/
 
 This is a different approach to the original suggestion using a smartphone.
 
@@ -71,5 +72,4 @@ This will display the readings rather than writing them to the CSV file
 4. Test run times to get a better indication of current draw / battery life
 5. Add piezo buzzer to give realtime feedback (eg. pitch=elevation, final chime to indicate total time relative to best effort)
 6. Add GPS or other sensors to correlate wheelie success with location
-7. Add log file roll-over to avoid filling up the 4MB capacity of the R2
-8. Add 3D printable case
+7. Add 3D printable case
